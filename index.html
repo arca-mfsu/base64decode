@@ -21,6 +21,7 @@
       
         textarea {
             width: 100%;
+            box-sizing: border-box;
             padding: 10px; /* 내부 여백을 추가합니다. */
             font-size: 14px; /* 텍스트 크기를 조절합니다. */
             border: 1px solid #ccc; /* 테두리를 추가합니다. */
@@ -35,20 +36,25 @@
     </style>
     <script>
         window.onload = function(){
-            output = document.getElementById("output");
-            output.innerText = atob(window.location.hash.substring(1));
+          input = window.location.hash.substring(1);
+          textarea = document.getElementById("textarea");
+          button = document.getElementById("button");
+          if(input){
+            textarea.readonly = true;
+            textarea.innerText = atob(input);
+            button.innerText = "다운로드";
+          }else{
+            textarea.innerText = "";
+            textarea.placeholder="여기에 입력하거나 붙여넣기해주세요...";
+            button.innerText = "디코드";
+          }
         }
     </script>
   </head>
   <body>
-    <textarea id="output">
-      
+    <textarea id="textarea">
     </textarea>
-    <button>
-      디코드
-    </button>
-    <button>
-      다운로드
+    <button id="button">
     </button>
   </body>
 </html>
