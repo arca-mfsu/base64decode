@@ -36,20 +36,31 @@
     </style>
     <script src="./base64.js"></script>
     <script>
-        window.onload = function(){
-          input = window.location.hash.substring(1);
-          textarea = document.getElementById("textarea");
-          button = document.getElementById("button");
-          if(input){
-            textarea.innerText = Base64.decode(input);
-            textarea.readOnly = true;
-            button.innerText = "다운로드";
-          }else{
-            textarea.innerText = "";
-            textarea.placeholder = "여기에 입력하거나 붙여넣기해주세요...";
-            button.innerText = "디코드";
-          }
+      initialize = function(){
+        input = window.location.hash.substring(1);
+        textarea = document.getElementById("textarea");
+        button = document.getElementById("button");
+        if(input){
+          textarea.innerText = Base64.decode(input);
+          textarea.readOnly = true;
+          button.innerText = "다운로드";
+        }else{
+          textarea.innerText = "";
+          textarea.placeholder = "여기에 입력하거나 붙여넣기해주세요...";
+          button.innerText = "디코드";
         }
+      }
+
+      decode = function(){
+
+      }
+
+      download = function(){
+        
+      }
+
+      window.onload = initialize;
+      window.onhashchange = initialize;
     </script>
   </head>
   <body>
