@@ -44,10 +44,12 @@
           textarea.value = Base64.decode(input);
           textarea.readOnly = true;
           button.innerText = "다운로드";
+          button.onclick = download;
         }else{
           textarea.value = "";
           textarea.placeholder = "여기에 입력하거나 붙여넣기해주세요...";
           button.innerText = "디코드";
+          button.onclick = decode;
         }
       }
 
