@@ -4,13 +4,19 @@
     <script>
       window.onload = function(){
         output = document.getElementById("output");
-        output.innerText = window.location.hash.substring(1);
+        output.innerText = atob(window.location.hash.substring(1));
       }
     </script>
   </head>
   <body>
-    <p id="output">
+    <textarea id="output">
       
-    </p>
+    </textarea>
+    <button style="width:100%; text-align:center;">
+      디코드
+    </button>
+    <button style="width:100%; text-align:center;">
+      다운로드
+    </button>
   </body>
 </html>
