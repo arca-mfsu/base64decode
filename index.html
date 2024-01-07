@@ -52,7 +52,8 @@
       }
 
       decode = function(){
-
+        textarea = document.getElementById("textarea");
+        window.location.hash = "#"+textarea.innerText;
       }
 
       download = function(){
