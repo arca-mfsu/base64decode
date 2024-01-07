@@ -1,21 +1,39 @@
 <!DOCTYPE HTML>
 <html>
   <head>
+    <style>
+        button {
+            width: 100%;
+            padding: 10px 20px; /* 내부 여백을 조절하여 텍스트와 버튼의 경계 간격을 조절합니다. */
+            font-size: 16px; /* 텍스트 크기를 조절합니다. */
+            font-weight: bold; /* 텍스트를 굵게 표시합니다. */
+            color: #fff; /* 텍스트 색상을 설정합니다. */
+            background-color: #3498db; /* 배경 색상을 설정합니다. */
+            border: none; /* 테두리를 없앱니다. */
+            border-radius: 5px; /* 버튼 모서리를 둥글게 만듭니다. */
+            cursor: pointer; /* 마우스를 올리면 커서를 포인터로 변경합니다. */
+            transition: background-color 0.3s ease; /* 배경 색상 변경 시 부드러운 전환 효과를 추가합니다. */
+        }
+    
+        button:hover {
+            background-color: #2980b9; /* 마우스를 올렸을 때 배경 색상을 변경합니다. */
+        }
+    </style>
     <script>
-      window.onload = function(){
-        output = document.getElementById("output");
-        output.innerText = atob(window.location.hash.substring(1));
-      }
+        window.onload = function(){
+            output = document.getElementById("output");
+            output.innerText = atob(window.location.hash.substring(1));
+        }
     </script>
   </head>
   <body>
     <textarea id="output">
       
     </textarea>
-    <button style="width:100%;">
+    <button>
       디코드
     </button>
-    <button style="width:100%;">
+    <button>
       다운로드
     </button>
   </body>
