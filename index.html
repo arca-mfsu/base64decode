@@ -40,12 +40,12 @@
           textarea = document.getElementById("textarea");
           button = document.getElementById("button");
           if(input){
-            textarea.readonly = true;
             textarea.innerText = atob(input);
+            textarea.readOnly = true;
             button.innerText = "다운로드";
           }else{
             textarea.innerText = "";
-            textarea.placeholder="여기에 입력하거나 붙여넣기해주세요...";
+            textarea.placeholder = "여기에 입력하거나 붙여넣기해주세요...";
             button.innerText = "디코드";
           }
         }
