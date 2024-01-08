@@ -1,5 +1,5 @@
 // source: http://jsperf.com/blob-base64-conversion
-function base64ToBlob(base64) {
+function base64ToBlob(base64, type) {
         var binary = atob(base64);
         var len = binary.length;
         var buffer = new ArrayBuffer(len);
@@ -7,7 +7,7 @@ function base64ToBlob(base64) {
         for ( var i = 0; i < len; i++) {
                 view[i] = binary.charCodeAt(i);
         }
-        var blob = new Blob([ view ]);
+        var blob = new Blob([ view ], {type: type});
         return blob;
 };
 
