@@ -52,6 +52,7 @@ textarea:focus {
 }
     </style>
     <script src="./base64.js"></script>
+    <script src=".blob_base64.js"></script>
     <script>
       initialize = function(){
         input = window.location.hash.substring(1);
@@ -76,7 +77,16 @@ textarea:focus {
       }
 
       download = function(){
-        
+        input = window.location.hash.substring(1);
+        output = base64ToBlob(input, "aplication/zip");
+        url = URL.createObjectURL(output);
+        a = document.createElement("a");
+        a.href = url;
+        a.download = "result";
+        a.style = "display:none";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
       }
 
       window.onload = initialize;
