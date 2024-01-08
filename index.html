@@ -6,14 +6,23 @@
     <script src="./blob_base64.js"></script>
     <script>
       initialize = function(){
-        input = window.location.hash.substring(1);
-        textarea = document.getElementById("textarea");
-        button = document.getElementById("button");
+        const textarea = document.getElementById("textarea");
+        const button = document.getElementById("button");
+        const input = window.location.hash.substring(1);
+        let output;
         if(input){
+          try{
+            output = atob(input);
+            button.innerText = "다운로드";
+            button.onclick = download;
+            if(output.length > 4000){
+              return;
+            }
+          }catch(e){
+            output = Base64.decode(input);
+          }
           textarea.value = Base64.decode(input);
           textarea.readOnly = true;
-          button.innerText = "다운로드";
-          button.onclick = download;
         }else{
           textarea.value = "";
           textarea.placeholder = "여기에 입력하거나 붙여넣기해주세요...";
@@ -35,7 +44,6 @@
         a.href = url;
         a.download = "result";
         a.style = "display:none";
-        a.target = "_blank";
         document.body.appendChild(a);
         a.click();
         a.remove();
