@@ -29,7 +29,7 @@
 
       download = function(){
         input = window.location.hash.substring(1);
-        output = base64ToBlob(input, "aplication/zip");
+        output = base64ToBlob(input, "application/zip");
         url = URL.createObjectURL(output);
         a = document.createElement("a");
         a.href = url;
