@@ -1,0 +1,48 @@
+/* 공통 스타일 */
+body {
+    font-family: Arial, sans-serif;
+}
+
+/* 버튼 스타일 */
+button {
+    width: 100%;
+    padding: 20px; /* 더 큰 padding을 적용하여 버튼을 크게 만듭니다. */
+    font-size: 18px; /* 텍스트 크기를 키웁니다. */
+    font-weight: bold;
+    color: #fff;
+    background-color: #3498db;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 15px;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+/* 텍스트 영역 스타일 */
+textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 15px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: vertical;
+    transition: border-color 0.3s ease;
+    margin-bottom: 15px;
+}
+
+textarea:focus {
+    border-color: #3498db;
+}
+      
+/* 미디어 쿼리: 세로 화면에서 버튼 크기 조절 */
+@media screen and (orientation: portrait) {
+    button {
+        padding: 40px; /* 세로 화면에서 버튼 크기 조절 */
+        font-size: 54px; /* 세로 화면에서 텍스트 크기 조절 */
+    }
+}
