@@ -10,25 +10,34 @@
         const button = document.getElementById("button");
         const input = window.location.hash.substring(1);
         let output;
-        if(input){
-          try{
-            output = atob(input);
-            button.innerText = "다운로드";
-            button.onclick = download;
-            if(output.length > 4000){
-              return;
-            }
-          }catch(e){
-            output = Base64.decode(input);
-          }
-          textarea.value = Base64.decode(input);
-          textarea.readOnly = true;
-        }else{
-          textarea.value = "";
-          textarea.placeholder = "여기에 입력하거나 붙여넣기해주세요...";
-          button.innerText = "디코드";
-          button.onclick = decode;
+        
+        //set default
+        textarea.value = "";
+        textarea.placeholder = "여기에 입력하거나 붙여넣기해주세요...";
+        button.innerText = "디코드";
+        button.onclick = decode;
+        
+        if(!input){
+          return;
         }
+
+        //set result
+        textarea.value = Base64.decode(input);
+        textarea.readOnly = true;
+        button.innerText = "다운로드";
+        button.onclick = download;
+        
+        try{
+          output = atob(input);
+          if(output.length > 4000){
+            textarea.style = "display:none";
+          }
+        }catch(e){
+          output = Base64.decode(input);
+          button.style = "display:none";
+        }
+
+        
       }
 
       decode = function(){
