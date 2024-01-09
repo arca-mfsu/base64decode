@@ -4,7 +4,7 @@
 function ExtensionChecker(){
 }
 
-ExtensionChecker.getExtension(binary){
+ExtensionChecker.getExtension = function(binary){
   if(binary.slice(0,4) === "\x50\x4B\x03\x04")
     return ".zip";
   if(binary.slice(0,3) === "\xFF\xD8\xFF")
