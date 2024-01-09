@@ -102,13 +102,13 @@
 
       function getExtension(binary){
         if(binary.slice(0,4) === "\x50\x4B\x03\x04")
-          return "zip";
+          return ".zip";
         if(binary.slice(0,3) === "\xFF\xD8\xFF")
-          return "jpg";
+          return ".jpg";
         if(binary.slice(0,8) === "\x89\x50\x4E\x47\x0D\x0A\x1A\x0A")
-          return "png";
+          return ".png";
         if(binary.slice(0,3) === "\x47\x49\x46")
-          return "gif";
+          return ".gif";
         
         return "txt";
       }
