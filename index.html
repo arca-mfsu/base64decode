@@ -10,9 +10,6 @@
         const button = document.getElementById("button");
         const input = document.getElementById("input");
         const base64 = window.location.hash.substring(1);
-        let result = "";
-        let isDownloadMode = false;
-        let isResultMode = false;
         
         //set input default
         if(!base64){
@@ -29,26 +26,30 @@
           return;
         }
 
+        // re-initialize
+        const resultBinary = atob(base64);
+        const resultArray = binaryToArray(resultBinary);
+        const textDecoder = new TextDecoder('utf-8');
+        const resultUtf8 = textDecoder.decode(resultArray);
+        const fileExtension = getExtension(resultArray);
+        let fileName = "";
+        let isDownloadMode = false;
+        let isResultMode = false;
+
         //check mode
-        try{
-          result = atob(base64);
-          if(result.length < 4000)
-            isResultMode = true;
-          if(result.length > 300)
-            isDownloadMode = true;
-        }catch(e){
-          result = Base64.decode(base64);
+        if(result.length < 4000)
           isResultMode = true;
-        }   
+        if(result.length > 300)
+          isDownloadMode = true;
 
         
         //set output default
-        textarea.value = result;
+        textarea.value = resultUtf8;
         textarea.readOnly = true;
         textarea.placeholder = "";
         textarea.style = isResultMode ? "" : "display:none";
         input.value = "";
-        input.placeholder = "rpgsave.zip";
+        input.placeholder = "rpgsave." + fileExtension;
         input.style = isDownloadMode ? "" : "display:none";
         button.innerText = "다운로드";
         button.onclick = download;
@@ -56,6 +57,21 @@
 
       }
 
+      function binaryToArray(binary){
+        const array = new Uint8Array(binary.length);
+        for (let i = 0; i < binary.length; i++) {
+            array[i] = binary.charCodeAt(i);
+        }
+        return array;
+      }
+
+      function getExtension(array){
+        if(array[0]===0x50&&array[1]===0x4B&&array[2]===0x03&&array[3]===0x04){
+          return "zip";
+        }
+        return "txt";
+      }
+      
       decode = function(){
         const textarea = document.getElementById("textarea");
         window.location.hash = "#"+textarea.value;
