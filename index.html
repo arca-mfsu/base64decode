@@ -98,7 +98,7 @@
         const result = base64ToBlob(base64);
         const url = URL.createObjectURL(result);
         const fileName = input.value || input.placeholder || "result";
-        const fileExtension = fileName.includes(".") ? "" : input.placeholder.includes(".") ? input.placeholder.split(".").pop() : ".txt";
+        const fileExtension = fileName.includes(".") ? "" : input.placeholder.includes(".") ? input.placeholder.substring(input.placeholder.lastIndexOf('.')) : ".txt";
         a = document.createElement("a");
         a.href = url;
         a.download = replaceSystemChar(fileName+fileExtension);
