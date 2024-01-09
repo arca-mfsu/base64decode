@@ -8,13 +8,18 @@
       initialize = function(){
         const textarea = document.getElementById("textarea");
         const button = document.getElementById("button");
-        const input = window.location.hash.substring(1);
+        const input = document.getElementById("input");
+        const base64 = window.location.hash.substring(1);
         
         //set input default
-        if(!input){
+        if(!base64){
           textarea.value = "";
+          textarea.readOnly = false;
           textarea.placeholder = "여기에 입력하거나 붙여넣기해주세요...";
           textarea.style = "";
+          input.value = "";
+          input.placeholder = "";
+          input.style = "display:none";
           button.innerText = "디코드";
           button.onclick = decode;
           button.style = "";
@@ -24,41 +29,47 @@
         //set output default
         textarea.value = "";
         textarea.readOnly = true;
+        textarea.placeholder = "";
         textarea.style = "display:none";
+        input.value = "";
+        input.placeholder = "rpgsave.zip";
+        input.style = "display:none";
         button.innerText = "다운로드";
         button.onclick = download;
         button.style = "display:none";
 
         //set output value
         try{
-          const output = atob(input);
+          const result = atob(base64);
           
-          if(output.length < 4000){
-            textarea.value = output;
+          if(result.length < 4000){
+            textarea.value = result;
             textarea.style = "";
           }
         
-          if(output.length > 300){
+          if(result.length > 300){
+            input.style = "";
             button.style = "";
           }
         }catch(e){
-          textarea.value = Base64.decode(input);
+          textarea.value = Base64.decode(base64);
           textarea.style = "";
         }   
       }
 
       decode = function(){
-        textarea = document.getElementById("textarea");
+        const textarea = document.getElementById("textarea");
         window.location.hash = "#"+textarea.value;
       }
 
       download = function(){
-        input = window.location.hash.substring(1);
-        output = base64ToBlob(input, "application/zip");
-        url = URL.createObjectURL(output);
+        const input = document.getElementById("input");
+        const base64 = window.location.hash.substring(1);
+        const result = base64ToBlob(base64, "application/zip");
+        const url = URL.createObjectURL(result);
         a = document.createElement("a");
         a.href = url;
-        a.download = "result";
+        a.download = input.value;
         a.style = "display:none";
         document.body.appendChild(a);
         a.click();
