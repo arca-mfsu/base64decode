@@ -9,12 +9,18 @@
         const button = document.getElementById("button");
         const input = document.getElementById("input");
         const base64 = window.location.hash.substring(1);
+        let exceptionMessage = "";
+
+        //bug catch
+        try{atob(base64)}catch(e){
+          exceptionMessage = "잘못된 base64 코드입니다. ";
+        }
         
         //set input default
-        if(!base64){
+        if(!base64 || exceptionMessage){
           textarea.value = "";
           textarea.readOnly = false;
-          textarea.placeholder = "여기에 입력하거나 붙여넣기해주세요...";
+          textarea.placeholder = exceptionMessage + "여기에 base64 코드를 입력하거나 붙여넣기해주세요...";
           textarea.style = "";
           input.value = "";
           input.placeholder = "";
@@ -24,31 +30,29 @@
           button.style = "";
           return;
         }
-
+        
         // re-initialize
         const resultBinary = atob(base64);
-        const resultArray = binaryToArray(resultBinary);
-        const textDecoder = new TextDecoder('utf-8');
-        const resultUtf8 = textDecoder.decode(resultArray);
-        const fileExtension = getExtension(resultArray);
-        let fileName = "";
+        const result = binaryToUtf8(resultBinary);
+        const fileExtension = getExtension(resultBinary);
+        const fileName = decodeURIComponent(document.location.search.substring(1)) || "result";
         let isDownloadMode = false;
         let isResultMode = false;
 
         //check mode
-        if(resultUtf8.length < 4000)
+        if(result.length < 4000)
           isResultMode = true;
-        if(resultUtf8.length > 300)
+        if(result.length > 300)
           isDownloadMode = true;
 
         
         //set output default
-        textarea.value = resultUtf8;
+        textarea.value = result;
         textarea.readOnly = true;
         textarea.placeholder = "";
         textarea.style = isResultMode ? "" : "display:none";
         input.value = "";
-        input.placeholder = "rpgsave." + fileExtension;
+        input.placeholder = fileName;
         input.style = isDownloadMode ? "" : "display:none";
         button.innerText = "다운로드";
         button.onclick = download;
@@ -56,19 +60,32 @@
 
       }
 
-      function binaryToArray(binary){
+      function binaryToUtf8(binary){
+        const textDecoder = new TextDecoder('utf-8');
         const array = new Uint8Array(binary.length);
         for (let i = 0; i < binary.length; i++) {
             array[i] = binary.charCodeAt(i);
         }
-        return array;
+        return textDecoder.decode(array);
       }
 
-      function getExtension(array){
-        if(array[0]===0x50&&array[1]===0x4B&&array[2]===0x03&&array[3]===0x04){
+      function getExtension(binary){
+        if(binary.slice(0,4) === "\x50\x4B\x03\x04")
           return "zip";
-        }
+        if(binary.slice(0,3) === "\xFF\xD8\xFF")
+          return "jpg";
+        if(binary.slice(0,8) === "\x89\x50\x4E\x47\x0D\x0A\x1A\x0A")
+          return "png";
+        if(binary.slice(0,3) === "\x47\x49\x46")
+          return "gif";
+        
         return "txt";
+      }
+
+      function getFileFullName(name, extension){
+        const replacements = {'/':'／', '\\':'＼', ':':'：', '*':'＊', '"':'゛', '<':'＜', '>':'＞', '|':'｜'};
+        const fullName = name + "." + extension;
+        return fullName.replace(/[\/\\:*"<>|]/g, match=>replacements[match]);
       }
       
       decode = function(){
@@ -81,9 +98,11 @@
         const base64 = window.location.hash.substring(1);
         const result = base64ToBlob(base64);
         const url = URL.createObjectURL(result);
+        const fileName = input.value || input.placeholder || "rpgsave.zip";
+        const fileExtension = filename.includes(".") ? filename.pop() : "txt";
         a = document.createElement("a");
         a.href = url;
-        a.download = input.value || input.placeholder || "rpgsave.zip";
+        a.download = getFileFullName(fileName, fileExtension);
         a.style = "display:none";
         document.body.appendChild(a);
         a.click();
