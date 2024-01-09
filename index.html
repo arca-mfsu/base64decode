@@ -40,7 +40,7 @@
         
         // re-initialize
         const resultBinary = atob(base64);
-        const fileExtension = getExtension(resultBinary);
+        const fileExtension = ExtensionChecker.getExtension(resultBinary);
         const fileName = decodeURIComponent(document.location.search.substring(1)) || "result" + fileExtension;
         let result = "";
         let isDownloadMode = false;
