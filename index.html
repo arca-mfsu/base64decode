@@ -11,6 +11,13 @@
         const base64 = window.location.hash.substring(1);
         let exceptionMessage = "";
 
+        //cache initialize
+        if (sessionStorage.getItem("resultUrlCache")){
+          const resultUrlCache = sessionStorage.getItem("resultUrlCache");
+          URL.revokeObjectURL(resultUrlCache);
+          sessionStorage.removeItem("resultUrlCache");
+        }
+        
         //bug catch
         try{atob(base64)}catch(e){
           exceptionMessage = "잘못된 base64 코드입니다. ";
@@ -33,24 +40,27 @@
         
         // re-initialize
         const resultBinary = atob(base64);
-        const result = binaryToUtf8(resultBinary);
         const fileExtension = getExtension(resultBinary);
-        const fileName = decodeURIComponent(document.location.search.substring(1)) || "result";
+        const fileName = decodeURIComponent(document.location.search.substring(1)) || "result" + fileExtension;
+        let result = "";
         let isDownloadMode = false;
-        let isResultMode = false;
+        let resultMode = false;
 
         //check mode
-        if(result.length < 4000)
-          isResultMode = true;
-        if(result.length > 300)
+        if([".png",".jpg",".gif"].includes(fileExtension)){
+          resultMode = "img";
           isDownloadMode = true;
-
+        }else if(".txt" === fileExtension){
+          resultMode = "text";
+        }else{
+          isDownloadMode = true;
+        }
         
         //set output default
-        textarea.value = result;
+        textarea.value = "";
         textarea.readOnly = true;
         textarea.placeholder = "";
-        textarea.style = isResultMode ? "" : "display:none";
+        textarea.style = ResultMode ? "" : "display:none";
         input.value = "";
         input.placeholder = fileName;
         input.style = isDownloadMode ? "" : "display:none";
@@ -58,6 +68,16 @@
         button.onclick = download;
         button.style = isDownloadMode ? "" : "display:none";
 
+        
+        if(resultMode==="text"){
+          textarea.value = binaryToUtf8(resultBinary);
+        }else if(resultMode==="img"){
+          const result = binaryToBlob(resultBinary);
+          const resultUrlCache = URL.createObjectURL(result);
+          textarea.style = "background-size: contain; background-repeat: no-repeat; background-image: url("+resultUrlCache+")";
+        }
+
+        
       }
 
       function binaryToUtf8(binary){
@@ -68,6 +88,17 @@
         }
         return textDecoder.decode(array);
       }
+
+      function binaryToBlob(binary) {
+        const array = new Uint8Array(binary.length);
+        for (let i = 0; i < binary.length; i++) {
+            array[i] = binary.charCodeAt(i);
+        }
+        const blob = new Blob([ array ]);
+        return blob;
+      };
+      
+
 
       function getExtension(binary){
         if(binary.slice(0,4) === "\x50\x4B\x03\x04")
@@ -106,6 +137,7 @@
         document.body.appendChild(a);
         a.click();
         a.remove();
+        URL.revokeObjectURL(url);
       }
 
       window.onload = initialize;
