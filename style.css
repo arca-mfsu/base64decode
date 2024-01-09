@@ -7,7 +7,7 @@ body {
 button {
     width: 100%;
     padding: 10px; /* 더 큰 padding을 적용하여 버튼을 크게 만듭니다. */
-    font-size: 36px; /* 텍스트 크기를 키웁니다. */
+    font-size: 40px; /* 텍스트 크기를 키웁니다. */
     font-weight: bold;
     color: #fff;
     background-color: #3498db;
@@ -21,6 +21,19 @@ button {
 button:hover {
     background-color: #2980b9;
 }
+
+/* 추가된 부분: input 스타일 */
+input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    font-size: 40px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+
 
 /* 텍스트 영역 스타일 */
 textarea {
@@ -40,18 +53,6 @@ textarea:focus {
     border-color: #3498db;
 }
 
-/* 추가된 부분: input 스타일 */
-input {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 10px;
-    font-size: 40px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-bottom: 15px;
-}
-
-
 
 /* 미디어 쿼리: 세로 화면에서 버튼 크기 조절 */
 @media screen and (orientation: portrait) {
@@ -65,6 +66,6 @@ input {
     }
     button {
         padding: 15px; /* 세로 화면에서 버튼 크기 조절 */
-        font-size: 54px; /* 세로 화면에서 텍스트 크기 조절 */
+        font-size: 60px; /* 세로 화면에서 텍스트 크기 조절 */
     }
 }
