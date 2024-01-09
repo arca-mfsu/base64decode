@@ -99,7 +99,7 @@
         const result = base64ToBlob(base64);
         const url = URL.createObjectURL(result);
         const fileName = input.value || input.placeholder || "rpgsave.zip";
-        const fileExtension = filename.includes(".") ? filename.pop() : "txt";
+        const fileExtension = fileName.includes(".") ? fileName.pop() : "txt";
         a = document.createElement("a");
         a.href = url;
         a.download = getFileFullName(fileName, fileExtension);
