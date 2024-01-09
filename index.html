@@ -2,7 +2,7 @@
 <html>
   <head>
     <link rel="stylesheet" href="./style.css">
-    <script src="./blob_base64.js"></script>
+    <script src="./ExtensionChecker.js"></script>
     <script>
       initialize = function(){
         const textarea = document.getElementById("textarea");
@@ -99,8 +99,11 @@
       };
       
 
-
-      function getExtension(binary){
+      //~~~
+      function ExtensionChecker(){
+      }
+      
+      ExtensionChecker.getExtension(binary){
         if(binary.slice(0,4) === "\x50\x4B\x03\x04")
           return ".zip";
         if(binary.slice(0,3) === "\xFF\xD8\xFF")
@@ -110,8 +113,9 @@
         if(binary.slice(0,3) === "\x47\x49\x46")
           return ".gif";
         
-        return "txt";
+        return ".txt";
       }
+      //~~
 
       function replaceSystemChar(string){
         const replacements = {'/':'／', '\\':'＼', ':':'：', '*':'＊', '"':'゛', '<':'＜', '>':'＞', '|':'｜'};
@@ -126,7 +130,8 @@
       download = function(){
         const input = document.getElementById("input");
         const base64 = window.location.hash.substring(1);
-        const result = base64ToBlob(base64);
+        const binary = atob(base64);
+        const result = binaryToBlob(binary);
         const url = URL.createObjectURL(result);
         const fileName = input.value || input.placeholder || "result";
         const fileExtension = fileName.includes(".") ? "" : input.placeholder.includes(".") ? input.placeholder.substring(input.placeholder.lastIndexOf('.')) : ".txt";
