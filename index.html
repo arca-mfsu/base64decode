@@ -9,35 +9,40 @@
         const textarea = document.getElementById("textarea");
         const button = document.getElementById("button");
         const input = window.location.hash.substring(1);
-        let output;
         
-        //set default
-        textarea.value = "";
-        textarea.placeholder = "여기에 입력하거나 붙여넣기해주세요...";
-        button.innerText = "디코드";
-        button.onclick = decode;
-        
+        //set input default
         if(!input){
+          textarea.value = "";
+          textarea.placeholder = "여기에 입력하거나 붙여넣기해주세요...";
+          button.innerText = "디코드";
+          button.onclick = decode;
           return;
         }
 
-        //set result
-        textarea.value = Base64.decode(input);
+        //set output default
+        textarea.value = "";
         textarea.readOnly = true;
+        textarea.style = "display:none";
         button.innerText = "다운로드";
         button.onclick = download;
-        
+        button.style = "display:none";
+
+        //set output value
         try{
-          output = atob(input);
-          if(output.length > 4000){
-            textarea.style = "display:none";
+          const output = atob(input);
+          
+          if(output.length < 4000)
+            textarea.value = output;
+            textarea.style = "";
+          }
+        
+          if(output.length > 300){
+            button.style = "";
           }
         }catch(e){
-          output = Base64.decode(input);
-          button.style = "display:none";
-        }
-
-        
+          textarea.value = Base64.decode(input);
+          textarea.style = "";
+        }   
       }
 
       decode = function(){
@@ -65,6 +70,8 @@
   <body>
     <textarea id="textarea">
     </textarea>
+    <input id="input">
+    </input>
     <button id="button">
     </button>
   </body>
