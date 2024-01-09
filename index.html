@@ -10,6 +10,9 @@
         const button = document.getElementById("button");
         const input = document.getElementById("input");
         const base64 = window.location.hash.substring(1);
+        let result = "";
+        let isDownloadMode = false;
+        let isResultMode = false;
         
         //set input default
         if(!base64){
@@ -26,35 +29,31 @@
           return;
         }
 
+        //check mode
+        try{
+          result = atob(base64);
+          if(result.length < 4000)
+            isResultMode = true;
+          if(result.length > 300)
+            isDownloadMode = true;
+        }catch(e){
+          result = Base64.decode(base64);
+          isResultMode = true;
+        }   
+
+        
         //set output default
-        textarea.value = "";
+        textarea.value = result;
         textarea.readOnly = true;
         textarea.placeholder = "";
-        textarea.style = "display:none";
+        textarea.style = isResultMode ? "" : "display:none";
         input.value = "";
         input.placeholder = "rpgsave.zip";
-        input.style = "display:none";
+        input.style = isDownloadMode ? "" : "display:none";
         button.innerText = "다운로드";
         button.onclick = download;
-        button.style = "display:none";
+        button.style = isDownloadMode ? "" : "display:none";
 
-        //set output value
-        try{
-          const result = atob(base64);
-          
-          if(result.length < 4000){
-            textarea.value = result;
-            textarea.style = "";
-          }
-        
-          if(result.length > 300){
-            input.style = "";
-            button.style = "";
-          }
-        }catch(e){
-          textarea.value = Base64.decode(base64);
-          textarea.style = "";
-        }   
       }
 
       decode = function(){
@@ -65,11 +64,11 @@
       download = function(){
         const input = document.getElementById("input");
         const base64 = window.location.hash.substring(1);
-        const result = base64ToBlob(base64, "application/zip");
+        const result = base64ToBlob(base64);
         const url = URL.createObjectURL(result);
         a = document.createElement("a");
         a.href = url;
-        a.download = input.value;
+        a.download = input.value || input.placeholder || "rpgsave.zip";
         a.style = "display:none";
         document.body.appendChild(a);
         a.click();
