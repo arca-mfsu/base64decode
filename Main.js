@@ -53,7 +53,7 @@ Main.checkException = function(){
 Main.showDecode = function(){
   this.textarea.value = "";
   this.textarea.readOnly = false;
-  this.textarea.placeholder = exceptionMessage + "여기에 base64 코드를 입력하거나 붙여넣기해주세요...";
+  this.textarea.placeholder = this.exceptionMessage + "여기에 base64 코드를 입력하거나 붙여넣기해주세요...";
   this.textarea.style = "";
   this.input.value = "";
   this.input.placeholder = "";
@@ -69,13 +69,13 @@ Main.showResult = function(){
   this.textarea.value = "";
   this.textarea.readOnly = true;
   this.textarea.placeholder = "";
-  this.textarea.style = resultMode ? "" : "display:none";
+  this.textarea.style = this.resultMode ? "" : "display:none";
   this.input.value = "";
-  this.input.placeholder = fileName;
-  this.input.style = isDownloadMode ? "" : "display:none";
+  this.input.placeholder = this.fileName;
+  this.input.style = this.resultDownload ? "" : "display:none";
   this.button.innerText = "다운로드";
   this.button.onclick = this.onDownload.bind(this);
-  this.button.style = isDownloadMode ? "" : "display:none";
+  this.button.style = this.resultDownload ? "" : "display:none";
 
   this.calcResultLast();
 }
@@ -104,9 +104,10 @@ Main.calcResultLast = function(){
     this.textarea.value = binaryToUtf8(this.resultBinary);
     
   }else if(this.resultMode==="img"){
-    const result = binaryToBlob(this.resultBinary);
-    const resultUrlCache = URL.createObjectURL(result);
+    this.result = binaryToBlob(this.resultBinary);
+    const resultUrlCache = URL.createObjectURL(this.result);
     this.textarea.style = "background-size: contain; background-repeat: no-repeat; background-image: url("+resultUrlCache+")";
+    sessionStorage.setItem("resultUrlCache", resultUrlCache);
     
   }else if(this.resultMode==="zip"){
     const zip = new JSZip();
@@ -131,8 +132,8 @@ Main.onDownload = function(){
   this.resultBinary = atob(this.base64);
   this.result = binaryToBlob(this.resultBinary);
   const url = URL.createObjectURL(this.result);
-  const fileName = input.value || input.placeholder || "result";
-  const fileExtension = fileName.includes(".") ? "" : input.placeholder.includes(".") ? input.placeholder.substring(input.placeholder.lastIndexOf('.')) : ".txt";
+  const fileName = this.input.value || this.input.placeholder || "result";
+  const fileExtension = fileName.includes(".") ? "" : this.input.placeholder.includes(".") ? this.input.placeholder.substring(this.input.placeholder.lastIndexOf('.')) : ".txt";
   a = document.createElement("a");
   a.href = url;
   a.download = replaceSystemChar(fileName+fileExtension);
