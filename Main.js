@@ -71,7 +71,7 @@ Main.showResult = function(){
   this.textarea.placeholder = "";
   this.textarea.style = this.resultMode ? "" : "display:none";
   this.input.value = "";
-  this.input.placeholder = this.fileName;
+  this.input.placeholder = this.resultName;
   this.input.style = this.resultDownload ? "" : "display:none";
   this.button.innerText = "다운로드";
   this.button.onclick = this.onDownload.bind(this);
@@ -129,8 +129,7 @@ Main.onDecode = function(){
 }
 
 Main.onDownload = function(){
-  this.resultBinary = atob(this.base64);
-  this.result = binaryToBlob(this.resultBinary);
+  const result = binaryToBlob(this.resultBinary);
   const url = URL.createObjectURL(this.result);
   const fileName = this.input.value || this.input.placeholder || "result";
   const fileExtension = fileName.includes(".") ? "" : this.input.placeholder.includes(".") ? this.input.placeholder.substring(this.input.placeholder.lastIndexOf('.')) : ".txt";
