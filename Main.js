@@ -1,4 +1,5 @@
 function Main(){
+  throw new Error("This is a static class");
 }
 
 Main.initialize = function(){
@@ -100,16 +101,16 @@ Main.calcResultFirst = function(){
 }
 
 Main.calcResultLast = function(){
-  if(this.resultMode==="text"){
+  if(this.resultMode === "text"){
     this.textarea.value = binaryToUtf8(this.resultBinary);
     
-  }else if(this.resultMode==="img"){
+  }else if(this.resultMode === "img"){
     this.result = binaryToBlob(this.resultBinary);
     const resultUrlCache = URL.createObjectURL(this.result);
     this.textarea.style = "background-size: contain; background-repeat: no-repeat; background-image: url("+resultUrlCache+")";
     sessionStorage.setItem("resultUrlCache", resultUrlCache);
     
-  }else if(this.resultMode==="zip"){
+  }else if(this.resultMode === "zip"){
     const zip = new JSZip();
     const textarea = this.textarea;
     
@@ -135,7 +136,7 @@ Main.onDownload = function(){
   const fileExtension = fileName.includes(".") ? "" : this.input.placeholder.includes(".") ? this.input.placeholder.substring(this.input.placeholder.lastIndexOf('.')) : ".txt";
   a = document.createElement("a");
   a.href = url;
-  a.download = replaceSystemChar(fileName+fileExtension);
+  a.download = replaceSystemChar(fileName + fileExtension);
   a.style = "display:none";
   document.body.appendChild(a);
   a.click();
