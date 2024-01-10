@@ -55,7 +55,7 @@ Main.showDecode = function(){
   this.input.placeholder = "";
   this.input.style = "display:none";
   this.button.innerText = "디코드";
-  this.button.onclick = this.onDecode.bind(this);
+  this.button.onclick = this.Decode.bind(this);
   this.button.style = "";
 }
 
@@ -68,7 +68,7 @@ Main.showResult = function(){
   this.input.placeholder = "";
   this.input.style = "";
   this.button.innerText = "다운로드";
-  this.button.onclick = this.onDownload.bind(this);
+  this.button.onclick = this.Download.bind(this);
   this.button.style = "";
 
   this.calcResult();
@@ -125,15 +125,15 @@ Main.disableDownload = function(){
 }
 
 
-Main.onDecode = function(){
+Main.Decode = function(){
   window.location.hash = "#" + this.textarea.value;
 }
 
-Main.onDownload = function(){
+Main.Download = function(){
   const result = Utils.binaryToBlob(this.resultBinary);
   const url = URL.createObjectURL(result);
   const fileName = this.input.value || this.input.placeholder || "result";
-  const fileExtension = fileName.includes(".") ? "" : this.input.placeholder.includes(".") ? this.input.placeholder.substring(this.input.placeholder.lastIndexOf('.')) : ".txt";
+  const fileExtension = fileName.includes(".") ? "" : this.resultName.includes(".") ? this.resultName.substring(this.resultName.lastIndexOf('.')) : ".txt";
   a = document.createElement("a");
   a.href = url;
   a.download = Utils.replaceSystemChar(fileName + fileExtension);
