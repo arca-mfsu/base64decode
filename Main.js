@@ -9,13 +9,8 @@ Main.initialize = function(){
   this.input = document.getElementById("input");
 
   //calculate base64 decode
-  this.resultBase64 = window.location.hash.substring(1);
+  this.resultBase64 = decodeURIComponent(window.location.hash.substring(1));
   this.resultBinary = "";
-  this.result = null;
-
-  //show download button and result[image, zip, text, ...]
-  this.resultMode = "";
-  this.resultDownload = false;
 
   //download filename
   this.resultName = "";
@@ -65,65 +60,70 @@ Main.showDecode = function(){
 }
 
 Main.showResult = function(){
-  this.calcResultFirst();
-  
   this.textarea.value = "";
   this.textarea.readOnly = true;
   this.textarea.placeholder = "";
-  this.textarea.style = this.resultMode ? "" : "display:none";
+  this.textarea.style = "display:none";
   this.input.value = "";
-  this.input.placeholder = this.resultName;
-  this.input.style = this.resultDownload ? "" : "display:none";
+  this.input.placeholder = "";
+  this.input.style = "";
   this.button.innerText = "다운로드";
   this.button.onclick = this.onDownload.bind(this);
-  this.button.style = this.resultDownload ? "" : "display:none";
+  this.button.style = "";
 
-  this.calcResultLast();
+  this.calcResult();
 }
 
-Main.calcResultFirst = function(){
+Main.calcResult = function(){
   this.resultBinary = atob(this.resultBase64);
   this.resultExtension = ExtensionChecker.getExtension(this.resultBinary);
-  this.resultName = decodeURIComponent(document.location.search.substring(1)) || "result" + this.resultExtension;
-
-  //check mode
+  this.resultName = decodeURIComponent(document.location.search.substring(1));
+  this.resultName = this.resultName || "result" + this.resultExtension;
+  
+  this.input.placeholder = this.resultName;
+  
   if([".png",".jpg",".gif"].includes(this.resultExtension)){
-    this.resultMode = "img";
-    this.resultDownload = true;
+    this.calcImgResult();
   }else if(".zip" === this.resultExtension){
-    this.resultMode = "zip";
-    this.resultDownload = true;
+    this.calcZipResult();
   }else if(".txt" === this.resultExtension){
-    this.resultMode = "text";
-  }else{
-    this.resultDownload = true;
+    this.calcTextResult();
   }
 }
 
-Main.calcResultLast = function(){
-  if(this.resultMode === "text"){
-    this.textarea.value = binaryToUtf8(this.resultBinary);
-    
-  }else if(this.resultMode === "img"){
-    this.result = binaryToBlob(this.resultBinary);
-    const resultUrlCache = URL.createObjectURL(this.result);
-    this.textarea.style = "background-size: contain; background-repeat: no-repeat; background-image: url("+resultUrlCache+")";
-    sessionStorage.setItem("resultUrlCache", resultUrlCache);
-    
-  }else if(this.resultMode === "zip"){
-    const zip = new JSZip();
-    const textarea = this.textarea;
-    
-    zip.loadAsync(this.resultBinary).then(zipFile => {
-      zip.forEach((path, entry) => {
-        const size = entry._data.uncompressedSize;
-        const sizeName = (size<1<<10)?"BYTE":(size<1<<20)?"KB":(size<1<<30)?"MB":"GB";
-        const sizeResult = size/((size<1<<10)?1:(size<1<<20)?1<<10:(size<1<<30)?1<<20:1<<30);
-        textarea.value += `${path} [${sizeResult.toFixed(2)*1}${sizeName}]\n`;
-      });
-    });
-  }
+Main.calcImgResult = function(){
+  this.textarea.style = "";
+  const result = binaryToBlob(this.resultBinary);
+  const resultUrlCache = URL.createObjectURL(result);
+  this.textarea.style = "background-size: contain; background-repeat: no-repeat; background-image: url("+resultUrlCache+")";
+  sessionStorage.setItem("resultUrlCache", resultUrlCache);
 }
+
+Main.calcZipResult = function(){
+  this.textarea.style = "";
+  const zip = new JSZip();
+  const textarea = this.textarea;
+  zip.loadAsync(this.resultBinary).then(zipFile => {
+    zip.forEach((path, entry) => {
+      const size = entry._data.uncompressedSize;
+      const sizeName = (size<1<<10)?"BYTE":(size<1<<20)?"KB":(size<1<<30)?"MB":"GB";
+      const sizeResult = size/((size<1<<10)?1:(size<1<<20)?1<<10:(size<1<<30)?1<<20:1<<30);
+      textarea.value += `${path} [${sizeResult.toFixed(2)*1}${sizeName}]\n`;
+    });
+  });
+}
+
+Main.calcTextResult = function(){
+  this.textarea.style = "";
+  this.textarea.value = binaryToUtf8(this.resultBinary);
+  this.disableDownload();
+}
+
+Main.disableDownload = function(){
+  this.button.style = "display:none";
+  this.input.style = "display:none";
+}
+
 
 Main.onDecode = function(){
   window.location.hash = "#" + this.textarea.value;
