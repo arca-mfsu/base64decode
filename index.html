@@ -82,10 +82,11 @@
         }else if(resultMode==="zip"){
           const zip = new JSZip();
           zip.loadAsync(resultBinary).then(zipFile => {
-            zip.forEach((relativePath, zipEntry) => {
-              console.log("상대 경로:", relativePath);
-              console.log("파일 크기:", zipEntry._data.uncompressedSize);
-              console.log("압축된 파일 내용:", zipEntry.name);
+            zip.forEach((path, entry) => {
+              const size = zipEntry._data.uncompressedSize;
+              const sizeName = (size<1<<10)?"BYTE":(size<1<<20)?"KB":(size<1<<30)?"MB":"GB";
+              const sizeResult = size/((size<1<<10)?1:(size<1<<20)?1<<10:(size<1<<30)?1<<20:1<<30);
+              textarea.value += `${path} [${sizeResult.toFixed(2)}${sizeName}]\n`;
             });
           });
         }
