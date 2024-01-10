@@ -41,7 +41,7 @@ Main.initializeCache = function(){
 }
 
 Main.checkException = function(){
-  if(this.resultBase64){
+  if(!this.resultBase64){
     return "여기에 base64 코드를 입력하거나 붙여넣기해주세요...";
   }
   try{atob(this.resultBase64)}catch(e){
@@ -53,7 +53,7 @@ Main.checkException = function(){
 Main.showDecode = function(){
   this.textarea.value = "";
   this.textarea.readOnly = false;
-  this.textarea.placeholder = this.exceptionMessage + "여기에 base64 코드를 입력하거나 붙여넣기해주세요...";
+  this.textarea.placeholder = this.exceptionMessage;
   this.textarea.style = "";
   this.input.value = "";
   this.input.placeholder = "";
