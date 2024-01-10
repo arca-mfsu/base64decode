@@ -3,6 +3,7 @@
   <head>
     <link rel="stylesheet" href="./style.css">
     <script src="./ExtensionChecker.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
     <script>
       initialize = function(){
         const textarea = document.getElementById("textarea");
@@ -50,6 +51,9 @@
         if([".png",".jpg",".gif"].includes(fileExtension)){
           resultMode = "img";
           isDownloadMode = true;
+        }else if(".zip" === fileExtension){
+          resultMode = "zip";
+          isDownloadMode = true;
         }else if(".txt" === fileExtension){
           resultMode = "text";
         }else{
@@ -75,8 +79,15 @@
           const result = binaryToBlob(resultBinary);
           const resultUrlCache = URL.createObjectURL(result);
           textarea.style = "background-size: contain; background-repeat: no-repeat; background-image: url("+resultUrlCache+")";
-        }else if(resultMode==="img"){
-          
+        }else if(resultMode==="zip"){
+          const zip = new JSZip();
+          zip.loadAsync(resultBinary).then(zipFile => {
+            zip.forEach((relativePath, zipEntry) => {
+              console.log("상대 경로:", relativePath);
+              console.log("파일 크기:", zipEntry._data.uncompressedSize);
+              console.log("압축된 파일 내용:", zipEntry.name);
+            });
+          });
         }
 
         
