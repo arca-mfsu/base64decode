@@ -83,16 +83,16 @@ Main.showResult = function(){
 Main.calcResultFirst = function(){
   this.resultBinary = atob(this.resultBase64);
   this.resultExtension = ExtensionChecker.getExtension(this.resultBinary);
-  this.resultName = decodeURIComponent(document.location.search.substring(1)) || "result" + this.fileExtension;
+  this.resultName = decodeURIComponent(document.location.search.substring(1)) || "result" + this.resultExtension;
 
   //check mode
-  if([".png",".jpg",".gif"].includes(this.fileExtension)){
+  if([".png",".jpg",".gif"].includes(this.resultExtension)){
     this.resultMode = "img";
     this.resultDownload = true;
-  }else if(".zip" === this.fileExtension){
+  }else if(".zip" === this.resultExtension){
     this.resultMode = "zip";
     this.resultDownload = true;
-  }else if(".txt" === this.fileExtension){
+  }else if(".txt" === this.resultExtension){
     this.resultMode = "text";
   }else{
     this.resultDownload = true;
