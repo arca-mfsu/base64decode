@@ -93,7 +93,7 @@ Main.calcResult = function(){
 
 Main.calcImgResult = function(){
   this.textarea.style = "";
-  const result = binaryToBlob(this.resultBinary);
+  const result = Utils.binaryToBlob(this.resultBinary);
   const resultUrlCache = URL.createObjectURL(result);
   this.textarea.style = "background-size: contain; background-repeat: no-repeat; background-image: url("+resultUrlCache+")";
   sessionStorage.setItem("resultUrlCache", resultUrlCache);
@@ -115,7 +115,7 @@ Main.calcZipResult = function(){
 
 Main.calcTextResult = function(){
   this.textarea.style = "";
-  this.textarea.value = binaryToUtf8(this.resultBinary);
+  this.textarea.value = Utils.binaryToUtf8(this.resultBinary);
   this.disableDownload();
 }
 
@@ -130,13 +130,13 @@ Main.onDecode = function(){
 }
 
 Main.onDownload = function(){
-  const result = binaryToBlob(this.resultBinary);
+  const result = Utils.binaryToBlob(this.resultBinary);
   const url = URL.createObjectURL(result);
   const fileName = this.input.value || this.input.placeholder || "result";
   const fileExtension = fileName.includes(".") ? "" : this.input.placeholder.includes(".") ? this.input.placeholder.substring(this.input.placeholder.lastIndexOf('.')) : ".txt";
   a = document.createElement("a");
   a.href = url;
-  a.download = replaceSystemChar(fileName + fileExtension);
+  a.download = Utils.replaceSystemChar(fileName + fileExtension);
   a.style = "display:none";
   document.body.appendChild(a);
   a.click();
