@@ -130,7 +130,7 @@ Main.onDecode = function(){
 
 Main.onDownload = function(){
   const result = binaryToBlob(this.resultBinary);
-  const url = URL.createObjectURL(this.result);
+  const url = URL.createObjectURL(result);
   const fileName = this.input.value || this.input.placeholder || "result";
   const fileExtension = fileName.includes(".") ? "" : this.input.placeholder.includes(".") ? this.input.placeholder.substring(this.input.placeholder.lastIndexOf('.')) : ".txt";
   a = document.createElement("a");
