@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <link rel="stylesheet" href="./style.css">
+    <script src="./encode/Main.js"></script>
+    <script src="./encode/Utils.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
+    <script>
+      function initialize(){
+        try{
+          Main.initialize();
+        }catch(e){
+          const textarea = document.getElementById("textarea");
+          textarea.placeholder = e;
+          textarea.value = "";
+        }
+      }
+      
+      window.onload = initialize;
+      window.onhashchange = initialize;
+    </script>
+  </head>
+  <body>
+    <textarea id="textarea">
+    </textarea>
+    <button id="button" style="display:none">
+    </button>
+  </body>
+</html>
