@@ -51,12 +51,12 @@ Main.showDefault = function(){
   this.textarea.readOnly = false;
   this.textarea.placeholder = this.exceptionMessage;
   this.textarea.style = "";
-  this.topButton.innerText = "업로드";
-  this.topButton.onclick = this.Upload.bind(this);
-  this.topButton.style = "";
-  this.bottomButton.innerText = "인코드";
-  this.bottomButton.onclick = this.Encode.bind(this);
-  this.bottomButton.style = "";
+  this.buttonTop.innerText = "업로드";
+  this.buttonTop.onclick = this.Upload.bind(this);
+  this.buttonTop.style = "";
+  this.buttonBottom.innerText = "인코드";
+  this.buttonBottom.onclick = this.Encode.bind(this);
+  this.buttonBottom.style = "";
 }
 
 Main.showResult = function(){
@@ -64,12 +64,12 @@ Main.showResult = function(){
   this.textarea.readOnly = true;
   this.textarea.placeholder = "";
   this.textarea.style = "";
-  this.topButton.innerText = "복사";
-  this.topButton.onclick = this.Copy.bind(this);
-  this.topButton.style = "";
-  this.bottomButton.innerText = "다시하기";
-  this.bottomButton.onclick = this.Retry.bind(this);
-  this.bottomButton.style = "";
+  this.buttonTop.innerText = "복사";
+  this.buttonTop.onclick = this.Copy.bind(this);
+  this.buttonTop.style = "";
+  this.buttonBottom.innerText = "다시하기";
+  this.buttonBottom.onclick = this.Retry.bind(this);
+  this.buttonBottom.style = "";
 }
 
 Main.Upload = function(){
