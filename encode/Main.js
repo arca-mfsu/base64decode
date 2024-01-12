@@ -5,7 +5,8 @@ function Main(){
 Main.initialize = function(){
   //get document elements
   this.textarea = document.getElementById("textarea");
-  this.button = document.getElementById("button");
+  this.buttonTop = document.getElementById("buttonTop");
+  this.buttonBottom = document.getElementById("buttonBottom");
 
   //calculate base64 decode
   this.resultBase64 = decodeURIComponent(window.location.hash.substring(1));
